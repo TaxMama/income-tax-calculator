@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result, #details {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+    </style>
+    <script>
+        function calculateTax() {
+            var income = parseFloat(document.getElementById('income').value);
+            var tax = 0;
+            var details = '';
+
+            // Tax slab rates
+            var slab1 = 250000; // Up to ₹2,50,000
+            var slab2 = 500000; // ₹2,50,001 to ₹5,00,000
+            var slab3 = 1000000; // ₹5,00,001 to ₹10,00,000
+
+            // Calculate tax based on income slab rates
+            if (income <= slab1) {
+                // No tax for income up to ₹2,50,000
+                tax = 0;
+            } else if (income <= slab2) {
+                // 5% tax for income between ₹2,50,001 to ₹5,00,000
+                tax = (income - slab1) * 0.05;
+                details = 'Tax @ 5% for income between ₹2,50,001 to ₹5,00,000: ₹' + tax.toFixed(2);
+            } else if (income <= slab3) {
+                // ₹12,500 + 20% tax for income between ₹5,00,001 to ₹10,00,000
+                tax = 12500 + (income - slab2) * 0.2;
+                details = 'Tax @ 20% for income between ₹5,00,001 to ₹10,00,000: ₹' + (tax - 12500).toFixed(2) + '<br>';
+                details += 'Fixed tax for income up to ₹5,00,000: ₹12,500';
+            } else {
+                // ₹1,12,500 + 30% tax for income above ₹10,00,000
+                tax = 112500 + (income - slab3) * 0.3;
+                details = 'Tax @ 30% for income above ₹10,00,000: ₹' + (tax - 112500).toFixed(2) + '<br>';
+                details += 'Fixed tax for income up to ₹10,00,000: ₹1,12,500';
+            }
+
+            // Display the calculated tax and details
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Tax payable: ₹' + tax.toFixed(2);
+
+            var detailsDiv = document.getElementById('details');
+            detailsDiv.innerHTML = details;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Income Tax Calculator</h1>
+        <form>
+            <label for="income">Enter your income:</label>
+            <input type="number" id="income" name="income" required>
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+        </form>
+        <div id="result"></div>
+        <div id="details"></div>
+    </div>
+</body>
+</html>
